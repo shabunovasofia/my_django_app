@@ -141,12 +141,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'main.CustomUser'
 # Настройки Channels
 ASGI_APPLICATION = "myportal.asgi.application"
-REDIS_URL = os.environ.get("REDIS_URL", "redis://localhost:6379")
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [REDIS_URL],  # Убедитесь, что URL начинается с `rediss://` для SSL
+            "hosts": [os.environ.get("REDIS_URL")],  # Без SSL
         },
     },
 }
