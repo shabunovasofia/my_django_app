@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Семейная мастерская CanaryBird{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'home.css' %}">
+    <link rel="stylesheet" href="{% static 'product.css' %}">
+    <link rel="stylesheet" href="{% static 'contact.css' %}">
+    <link rel="stylesheet" href="{% static 'regist.css' %}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            padding-left: 60px;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 60px;
+            height: 100vh;
+            background: #FFC300;
+            z-index: 100;
+            overflow: hidden;
+            transition: width 0.3s;
+        }
+
+        .sidebar:hover,
+        .sidebar.active {
+            width: 350px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            padding: 15px 10px;
+            white-space: nowrap;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .logo-icon {
+            font-size: 24px;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 16px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .sidebar:hover .logo-text,
+        .sidebar.active .logo-text {
+            opacity: 1;
+        }
+
+        .menu {
+            list-style: none;
+            padding: 10px 0;
+        }
+
+        .menu li {
+            position: relative;
+        }
+
+        .menu a {
+            display: flex;
+            align-items: center;
+            padding: 12px 10px;
+            color: #000;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .menu a:hover {
+            background: rgba(0,0,0,0.05);
+        }
+
+        .menu i {
+            font-size: 18px;
+            width: 40px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .menu-text {
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .sidebar:hover .menu-text,
+        .sidebar.active .menu-text {
+            opacity: 1;
+        }
+
+        /* Стили для отображения/скрытия пунктов меню в зависимости от авторизации */
+        .auth-menu {
+            border-top: 1px solid rgba(0,0,0,0.1);
+            margin-top: 10px;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar" id="sidebar">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-kiwi-bird"></i>
+            </div>
+            <div class="logo-text">
+                Семейная мастерская CanaryBird
+            </div>
+        </div>
+
+        <ul class="menu">
+            <li><a href="{% url 'home' %}">
+                <i class="fas fa-home"></i>
+                <span class="menu-text">Главная</span>
+            </a></li>
+            <li><a href="{% url 'product' %}">
+                <i class="fas fa-box-open"></i>
+                <span class="menu-text">Продукция</span>
+            </a></li>
+            <li><a href="{% url 'reviews' %}">
+                <i class="fas fa-comment-alt"></i>
+                <span class="menu-text">Отзывы</span>
+            </a></li>
+            <li><a href="{% url 'contact' %}">
+                <i class="fas fa-envelope"></i>
+                <span class="menu-text">Контакты</span>
+            </a></li>
+        </ul>
+
+        <ul class="menu auth-menu">
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'profile' %}">
+                    <i class="fas fa-user"></i>
+                    <span class="menu-text">Профиль</span>
+                </a></li>
+                <li><a href="{% url 'logout' %}">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span class="menu-text">Выйти</span>
+                </a></li>
+            {% else %}
+                <li><a href="{% url 'login' %}">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span class="menu-text">Вход</span>
+                </a></li>
+                <li><a href="{% url 'register' %}">
+                    <i class="fas fa-user-plus"></i>
+                    <span class="menu-text">Регистрация</span>
+                </a></li>
+            {% endif %}
+        </ul>
+    </aside>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    {% block extrajs %}
+        <script src="{% static 'sign_in.js' %}"></script>
+        <script src="{% static 'log_in.js' %}"></script>
+        <script src="{% static 'menu.js' %}"></script>
+        <script src="{% static 'feedback.js' %}"></script>
+    {% endblock %}
+</body>
+</html>

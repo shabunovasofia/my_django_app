@@ -1,0 +1,106 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Мой профиль | CanaryBird{% endblock %}
+
+{% block content %}
+<div class="profile-wrapper" style="background-color: #f3f0ef; min-height: 100vh;">
+    <div class="container-fluid px-5 py-4">
+        <div class="profile-horizontal d-flex flex-wrap align-items-center justify-content-start bg-white p-4 rounded-4 shadow-sm gap-4">
+
+
+
+            <div class="info-block flex-grow-1">
+                <h2 class="fw-bold mb-4">{{ user.first_name }} {{ user.last_name }}</h2>
+                <div class="row g-3">
+                    <div class="col-md-6 col-lg-4">
+                        <div class="info-item">
+                            <span class="text-muted"><i class="fas fa-phone me-2"></i>Телефон:</span>
+                            <div class="fw-semibold mt-1">{{ user.phone|default:"Не указан" }}</div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="info-item">
+                            <span class="text-muted"><i class="fas fa-envelope me-2"></i>Email:</span>
+                            <div class="fw-semibold mt-1">{{ user.email|default:"Не указан" }}</div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="info-item">
+                            <span class="text-muted"><i class="fas fa-calendar me-2"></i>Регистрация:</span>
+                            <div class="fw-semibold mt-1">{{ user.date_joined|date:"d.m.Y" }}</div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="info-item">
+                            <span class="text-muted"><i class="fas fa-sign-in-alt me-2"></i>Последний вход:</span>
+                            <div class="fw-semibold mt-1">
+                                {% if user.last_login_local %}
+                                    {{ user.last_login_local|date:"d.m.Y H:i" }}
+                                {% else %}
+                                    —
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .profile-wrapper {
+        background-color: #f3f0ef; /* Фон для блока профиля */
+        min-height: 100vh; /* Задаём минимальную высоту для фона */
+    }
+
+    .profile-horizontal {
+        min-height: 260px;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        max-width: 900px;
+        margin: 0 auto;
+        background-color: #fff; /* Фон внутри блока */
+        margin-bottom: 20px; /* Убираем лишний белый фон снизу */
+    }
+
+    .avatar-block {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 160px;
+        height: 160px;
+        border-radius: 50%;
+        background-color: #f3f0ef;
+    }
+
+    .avatar-block i {
+        font-size: 6.5rem;
+        color: #999;
+    }
+
+    .info-item {
+        padding: 0.75rem 1rem;
+        background-color: #f9f9f9;
+        transition: background 0.2s ease;
+    }
+
+    .info-item:hover {
+        background-color: #f3f0ef;
+    }
+
+    @media (max-width: 768px) {
+        .profile-horizontal {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .avatar-block {
+            margin-bottom: 1rem;
+        }
+    }
+</style>
+{% endblock %}

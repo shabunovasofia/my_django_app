@@ -1,0 +1,93 @@
+{% extends 'main/base.html' %}
+{% block title %}Контакты - Семейная мастерская CanaryBird{% endblock %}
+{% block extracss%}
+    .cont {
+            background-color: #f3f0ef;
+
+    }
+{% endblock %}
+{% block content %}
+<div class="contact-contain">
+    <h2>Контакты</h2>
+    <p>Мы всегда рады вашим вопросам, отзывам и предложениям! Если у вас есть пожелания или вы хотите сделать заказ, свяжитесь с нами любым удобным способом:</p>
+
+    <form id="feedbackForm">
+    {% csrf_token %}
+    <div>
+        <label for="name">Имя:</label>
+        <input type="text" id="name" name="name" required>
+    </div>
+    <div>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+    </div>
+    <div>
+        <label for="message">Сообщение:</label>
+        <textarea id="message" name="message" required></textarea>
+    </div>
+    <button type="submit">Отправить</button>
+    <div id="responseMessage"></div>
+</form>
+
+    <p id="responseMessage"></p>
+
+    <section class="contact-info">
+        <h3><em>Наши контактные данные</em></h3>
+        <p><strong>Телефон:</strong> <span class="phone-icon">📞</span> +7 (123) 456-78-90</p>
+        <p><strong>Email:</strong> <a href="mailto:info@canarybird.ru">info@canarybird.ru</a></p>
+    </section>
+
+    <section class="social-media">
+        <h3><em>Следите за нами в соцсетях</em></h3>
+        <span>Мы всегда рады общению и обновлениям в социальных сетях. Подписывайтесь на нас:</span>
+        <ul>
+            <li><a href="https://vk.com" target="_blank"><strong>ВКонтакте</strong></a></li>
+            <li><a href="https://t.me" target="_blank"><strong>Телеграм</strong></a></li>
+        </ul>
+    </section>
+</div>
+{% endblock %}
+
+{% block extrajs %}
+
+<script>
+        document.getElementById("feedbackForm").addEventListener("submit", async function(event) {
+        event.preventDefault();
+
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const message = document.getElementById("message").value;
+
+        const telegramBotToken = "7575487584:AAEl8o_RaOeBuFA_zp57r0Z39AXtBk8q75g";
+        const chatId = 884379984;
+
+        const text = `✉ Новое сообщение!\n👤 Имя: ${name}\n📧 Email: ${email}\n💬 Сообщение: ${message}`;
+
+        const telegramUrl = `https://api.telegram.org/bot7575487584:AAEl8o_RaOeBuFA_zp57r0Z39AXtBk8q75g/sendMessage`;
+
+        try {
+            const response = await fetch(telegramUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: text
+                })
+            });
+
+            const result = await response.json();
+
+            if (result.ok) {
+                document.getElementById("responseMessage").textContent = "Сообщение успешно отправлено!";
+            } else {
+                document.getElementById("responseMessage").textContent = "Ошибка при отправке сообщения!";
+            }
+        } catch (error) {
+            console.error("Ошибка:", error);
+            document.getElementById("responseMessage").textContent = "Ошибка при отправке сообщения!";
+        }
+    });
+</script>
+{% endblock %}
