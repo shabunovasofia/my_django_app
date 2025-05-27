@@ -1,0 +1,6 @@
+{
+  "build": {
+    "dockerfilePath": "myportal/Dockerfile",
+    "context": "myportal"
+  }
+}
