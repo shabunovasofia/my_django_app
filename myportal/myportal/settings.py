@@ -144,20 +144,23 @@ ASGI_APPLICATION = "myportal.asgi.application"
 
 REDIS_URL = os.environ.get('REDIS_URL', 'redis://localhost:6379')
 
+from urllib.parse import urlparse
+
+redis_url = urlparse(os.environ.get('REDIS_URL'))
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [REDIS_URL],
+            "hosts": [(redis_url.hostname, redis_url.port)],
+            "password": redis_url.password,
         },
     },
 }
-
 # Also update your cache settings if using Redis cache
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": REDIS_URL,
+        "LOCATION": redis_url,
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
