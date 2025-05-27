@@ -147,11 +147,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [os.environ.get("REDIS_URL")],
-            "connection_kwargs": {
-                "ssl": True,
-                "ssl_cert_reqs": None  # Отключить проверку сертификата
-            }
+            "hosts": [os.environ.get("REDIS_URL")],  # Убедитесь, что URL содержит rediss://
         },
     },
 }
