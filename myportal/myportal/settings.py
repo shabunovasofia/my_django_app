@@ -141,43 +141,27 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'main.CustomUser'
 # Настройки Channels
 ASGI_APPLICATION = "myportal.asgi.application"
-
-
-from urllib.parse import urlparse
-
-# Получаем URL Redis из переменных окружения
 REDIS_URL = os.environ.get('REDIS_URL', 'redis://localhost:6379')
 
-# Парсим URL
-redis_url = urlparse(REDIS_URL)
-
-# Для Channels
+# Упрощенная и рабочая конфигурация для Channels
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [{
-                'address': f'rediss://:{redis_url.password}@{redis_url.hostname}:{redis_url.port}',
-                'ssl_cert_reqs': None  # Отключаем проверку сертификата
-            }],
-            "connection_kwargs": {
-                "ssl": True
-            }
+            "hosts": [REDIS_URL],  # Просто передаем полный URL
+            "ssl": True if REDIS_URL.startswith('rediss://') else False
         },
     },
 }
 
-# Для кэша (если используете)
+# Упрощенная конфигурация для кэша
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": REDIS_URL,
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            "SSL": True,
-            "CONNECTION_POOL_KWARGS": {
-                "ssl_cert_reqs": None
-            }
+            "SSL": True if REDIS_URL.startswith('rediss://') else False
         }
     }
 }
