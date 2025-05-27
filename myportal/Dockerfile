@@ -2,11 +2,13 @@ FROM python:3.10
 
 WORKDIR /myportal
 
+# Копируем файл из myportal внутрь образа
 COPY myportal/requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+# Копируем всё содержимое myportal внутрь контейнера
+COPY myportal .
 
 EXPOSE 8000
 
