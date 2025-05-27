@@ -143,13 +143,15 @@ AUTH_USER_MODEL = 'main.CustomUser'
 ASGI_APPLICATION = "myportal.asgi.application"
 REDIS_URL = os.environ.get('REDIS_URL', 'redis://localhost:6379')
 
-# Упрощенная и рабочая конфигурация для Channels
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [REDIS_URL],  # Просто передаем полный URL
-            "ssl": True if REDIS_URL.startswith('rediss://') else False
+            "hosts": [os.environ.get("REDIS_URL")],
+            "connection_kwargs": {
+                "ssl": True,
+                "ssl_cert_reqs": None  # Отключить проверку сертификата
+            }
         },
     },
 }
