@@ -141,27 +141,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'main.CustomUser'
 # Настройки Channels
 ASGI_APPLICATION = "myportal.asgi.application"
-REDIS_URL = os.environ.get("REDIS_PUBLIC_URL", "redis://localhost:6379")
-
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [REDIS_URL],
-            "ssl": True,  # Для Railway обязательно
-            "ssl_cert_reqs": None  # Отключить проверку сертификата
+            "hosts": [REDIS_URL],  # Убедитесь, что URL начинается с `rediss://` для SSL
         },
     },
-}
-
-# Упрощенная конфигурация для кэша
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": REDIS_URL,
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            "SSL": True if REDIS_URL.startswith('rediss://') else False
-        }
-    }
 }
