@@ -142,21 +142,22 @@ AUTH_USER_MODEL = 'main.CustomUser'
 # Настройки Channels
 ASGI_APPLICATION = "myportal.asgi.application"
 
-# Настройки Redis
+REDIS_URL = os.environ.get('REDIS_URL', 'redis://localhost:6379')
+
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [(os.environ.get("REDIS_URL", "redis://redis:6379"))],
+            "hosts": [REDIS_URL],
         },
     },
 }
 
-# Настройки кеша (опционально)
+# Also update your cache settings if using Redis cache
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": os.environ.get("REDIS_URL", "redis://redis:6379/0"),
+        "LOCATION": REDIS_URL,
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
