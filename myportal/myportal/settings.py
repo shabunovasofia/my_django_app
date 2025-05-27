@@ -142,17 +142,23 @@ AUTH_USER_MODEL = 'main.CustomUser'
 # Настройки Channels
 ASGI_APPLICATION = "myportal.asgi.application"
 
-REDIS_URL = os.environ.get('REDIS_URL', 'redis://localhost:6379')
 
 from urllib.parse import urlparse
 
-redis_url = urlparse(os.environ.get('REDIS_URL'))
+REDIS_URL = os.environ.get('REDIS_URL', 'redis://localhost:6379')
+
+# Парсим URL для извлечения компонентов
+redis_url = urlparse(REDIS_URL)
+
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [(redis_url.hostname, redis_url.port)],
-            "password": redis_url.password,
+            "hosts": [{
+                'address': f'redis://{redis_url.hostname}:{redis_url.port}',
+                'password': redis_url.password,
+                'ssl': True
+            }],
         },
     },
 }
