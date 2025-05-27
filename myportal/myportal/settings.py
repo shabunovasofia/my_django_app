@@ -27,8 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 CSRF_TRUSTED_ORIGINS = [
-    os.getenv("CSRF_TRUSTED_ORIGIN", "https://mydjangoapp-production-a2eb.up.railway.app")
+    "https://mydjangoapp-production-a2eb.up.railway.app"
 ]
+
 
 # Application definition
 
